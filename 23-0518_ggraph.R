@@ -38,13 +38,13 @@ highschool
 highschool |> mutate(
   year = ifelse(year == 1957, "영화", "방송")
 ) -> highschool
-
+highschool |> view()
 
 #
 graph <- as_tbl_graph(highschool) %>% 
   mutate(Popularity = centrality_degree(mode = 'in'))
 
-ggraph
+graph |> print(n = 50)
 
 # plot using ggraph
 ggraph(graph, layout = 'kk') + 
@@ -53,9 +53,18 @@ ggraph(graph, layout = 'kk') +
   facet_edges(~year) + 
   theme_graph(foreground = 'steelblue', fg_text_colour = 'white')
 
-
+graph |> view()
 #
-
+ggraph(graph, layout = 'kk') + 
+  geom_edge_fan(aes
+                (alpha = after_stat(index),
+                    color = ifelse(highschool$from %in% 
+                                     c(1,2,3,4,5,66,67,68,69,70,71,72), 
+                                   "red", "black")), 
+                show.legend = FALSE) + 
+  geom_node_point(aes(size = Popularity)) + 
+  facet_edges(~year) + 
+  theme_graph(foreground = 'steelblue', fg_text_colour = 'white')
 
 
 #
