@@ -4,6 +4,8 @@
 library(tidyverse)
 install.packages("tidygraph")
 library(tidygraph)
+library(showtext)
+showtext_auto()
 
 #
 ?tidygraph
@@ -32,7 +34,13 @@ library(tidygraph)
 load("./files/highschool.rda")
 highschool
 
+#if
+highschool |> mutate(
+  year = ifelse(year == 1957, "영화", "방송")
+) -> highschool
 
+
+#
 graph <- as_tbl_graph(highschool) %>% 
   mutate(Popularity = centrality_degree(mode = 'in'))
 
